@@ -1,7 +1,7 @@
-diff --git a/rtl/opentitan/prim_buf.sv b/rtl/opentitan/prim_buf.sv
+diff --git a/rtl/prim_buf.sv b/rtl/prim_buf.sv
 index 1b2fbff..6c6d442 100644
---- a/rtl/opentitan/prim_buf.sv
-+++ b/rtl/opentitan/prim_buf.sv
+--- a/rtl/prim_buf.sv
++++ b/rtl/prim_buf.sv
 @@ -4,7 +4,7 @@
  
  `include "prim_assert.sv"
@@ -11,10 +11,10 @@ index 1b2fbff..6c6d442 100644
    parameter int Width = 1
  ) (
    input        [Width-1:0] in_i,
-diff --git a/rtl/opentitan/prim_flop.sv b/rtl/opentitan/prim_flop.sv
+diff --git a/rtl/prim_flop.sv b/rtl/prim_flop.sv
 index 67b6e89..cf2b60a 100644
---- a/rtl/opentitan/prim_flop.sv
-+++ b/rtl/opentitan/prim_flop.sv
+--- a/rtl/prim_flop.sv
++++ b/rtl/prim_flop.sv
 @@ -4,7 +4,7 @@
  
  `include "prim_assert.sv"
@@ -24,10 +24,10 @@ index 67b6e89..cf2b60a 100644
    parameter int               Width      = 1,
    parameter logic [Width-1:0] ResetValue = 0
  ) (
-diff --git a/rtl/opentitan/prim_flop_2sync.sv b/rtl/opentitan/prim_flop_2sync.sv
+diff --git a/rtl/prim_flop_2sync.sv b/rtl/prim_flop_2sync.sv
 index 45f802b..3e6e60b 100644
---- a/rtl/opentitan/prim_flop_2sync.sv
-+++ b/rtl/opentitan/prim_flop_2sync.sv
+--- a/rtl/prim_flop_2sync.sv
++++ b/rtl/prim_flop_2sync.sv
 @@ -6,7 +6,7 @@
  // This may need to be moved to prim_generic if libraries have a specific cell
  // for synchronization
@@ -37,10 +37,10 @@ index 45f802b..3e6e60b 100644
    parameter int               Width      = 16,
    parameter logic [Width-1:0] ResetValue = '0
  ) (
-diff --git a/rtl/opentitan/rv_plic.sv b/rtl/opentitan/rv_plic.sv
+diff --git a/rtl/rv_plic.sv b/rtl/rv_plic.sv
 index 87c8c7f..f69908b 100644
---- a/rtl/opentitan/rv_plic.sv
-+++ b/rtl/opentitan/rv_plic.sv
+--- a/rtl/rv_plic.sv
++++ b/rtl/rv_plic.sv
 @@ -41,7 +41,7 @@ module rv_plic import rv_plic_reg_pkg::*; #(
  
    // Interrupt notification to targets
@@ -78,10 +78,10 @@ index 87c8c7f..f69908b 100644
  
    // Glue logic between rv_plic_reg_top and others
    assign cc_id = irq_id_o;
-diff --git a/rtl/opentitan/rv_plic_target.sv b/rtl/opentitan/rv_plic_target.sv
+diff --git a/rtl/rv_plic_target.sv b/rtl/rv_plic_target.sv
 index ded960e..d5cf121 100644
---- a/rtl/opentitan/rv_plic_target.sv
-+++ b/rtl/opentitan/rv_plic_target.sv
+--- a/rtl/rv_plic_target.sv
++++ b/rtl/rv_plic_target.sv
 @@ -28,7 +28,7 @@ module rv_plic_target #(
    input [N_SOURCE-1:0]  ip_i,
    input [N_SOURCE-1:0]  ie_i,
@@ -91,10 +91,10 @@ index ded960e..d5cf121 100644
    input [PrioWidth-1:0] threshold_i,
  
    output logic            irq_o,
-diff --git a/rtl/opentitan/prim_subreg_arb.sv b/rtl/opentitan/prim_subreg_arb.sv
+diff --git a/rtl/prim_subreg_arb.sv b/rtl/prim_subreg_arb.sv
 index 8003336..128d6e3 100644
---- a/rtl/opentitan/prim_subreg_arb.sv
-+++ b/rtl/opentitan/prim_subreg_arb.sv
+--- a/rtl/prim_subreg_arb.sv
++++ b/rtl/prim_subreg_arb.sv
 @@ -27,7 +27,7 @@ module prim_subreg_arb
    output logic [DW-1:0] wr_data
  );
