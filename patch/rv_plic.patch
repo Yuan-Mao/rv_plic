@@ -1,0 +1,106 @@
+diff --git a/rtl/opentitan/prim_buf.sv b/rtl/opentitan/prim_buf.sv
+index 1b2fbff..6c6d442 100644
+--- a/rtl/opentitan/prim_buf.sv
++++ b/rtl/opentitan/prim_buf.sv
+@@ -4,7 +4,7 @@
+ 
+ `include "prim_assert.sv"
+ 
+-module prim_generic_buf #(
++module prim_buf #(
+   parameter int Width = 1
+ ) (
+   input        [Width-1:0] in_i,
+diff --git a/rtl/opentitan/prim_flop.sv b/rtl/opentitan/prim_flop.sv
+index 67b6e89..cf2b60a 100644
+--- a/rtl/opentitan/prim_flop.sv
++++ b/rtl/opentitan/prim_flop.sv
+@@ -4,7 +4,7 @@
+ 
+ `include "prim_assert.sv"
+ 
+-module prim_generic_flop #(
++module prim_flop #(
+   parameter int               Width      = 1,
+   parameter logic [Width-1:0] ResetValue = 0
+ ) (
+diff --git a/rtl/opentitan/prim_flop_2sync.sv b/rtl/opentitan/prim_flop_2sync.sv
+index 45f802b..3e6e60b 100644
+--- a/rtl/opentitan/prim_flop_2sync.sv
++++ b/rtl/opentitan/prim_flop_2sync.sv
+@@ -6,7 +6,7 @@
+ // This may need to be moved to prim_generic if libraries have a specific cell
+ // for synchronization
+ 
+-module prim_generic_flop_2sync #(
++module prim_flop_2sync #(
+   parameter int               Width      = 16,
+   parameter logic [Width-1:0] ResetValue = '0
+ ) (
+diff --git a/rtl/opentitan/rv_plic.sv b/rtl/opentitan/rv_plic.sv
+index 87c8c7f..f69908b 100644
+--- a/rtl/opentitan/rv_plic.sv
++++ b/rtl/opentitan/rv_plic.sv
+@@ -41,7 +41,7 @@ module rv_plic import rv_plic_reg_pkg::*; #(
+ 
+   // Interrupt notification to targets
+   output [NumTarget-1:0] irq_o,
+-  output [SRCW-1:0]      irq_id_o [NumTarget],
++  output [NumTarget-1:0][SRCW-1:0]      irq_id_o,
+ 
+   output logic [NumTarget-1:0] msip_o
+ );
+@@ -54,21 +54,21 @@ module rv_plic import rv_plic_reg_pkg::*; #(
+ 
+   logic [NumSrc-1:0] ip;
+ 
+-  logic [NumSrc-1:0] ie [NumTarget];
++  logic [NumTarget-1:0][NumSrc-1:0] ie;
+ 
+   logic [NumTarget-1:0] claim_re; // Target read indicator
+-  logic [SRCW-1:0]      claim_id [NumTarget];
++  logic [NumTarget-1:0][SRCW-1:0]      claim_id;
+   logic [NumSrc-1:0]    claim; // Converted from claim_re/claim_id
+ 
+   logic [NumTarget-1:0] complete_we; // Target write indicator
+-  logic [SRCW-1:0]      complete_id [NumTarget];
++  logic [NumTarget-1:0][SRCW-1:0]      complete_id;
+   logic [NumSrc-1:0]    complete; // Converted from complete_re/complete_id
+ 
+-  logic [SRCW-1:0]      cc_id [NumTarget]; // Write ID
++  logic [NumTarget-1:0][SRCW-1:0]      cc_id; // Write ID
+ 
+-  logic [PRIOW-1:0] prio [NumSrc];
++  logic [NumSrc-1:0][PRIOW-1:0] prio;
+ 
+-  logic [PRIOW-1:0] threshold [NumTarget];
++  logic [NumTarget-1:0][PRIOW-1:0] threshold;
+ 
+   // Glue logic between rv_plic_reg_top and others
+   assign cc_id = irq_id_o;
+diff --git a/rtl/opentitan/rv_plic_target.sv b/rtl/opentitan/rv_plic_target.sv
+index ded960e..d5cf121 100644
+--- a/rtl/opentitan/rv_plic_target.sv
++++ b/rtl/opentitan/rv_plic_target.sv
+@@ -28,7 +28,7 @@ module rv_plic_target #(
+   input [N_SOURCE-1:0]  ip_i,
+   input [N_SOURCE-1:0]  ie_i,
+ 
+-  input [PrioWidth-1:0] prio_i [N_SOURCE],
++  input [N_SOURCE-1:0][PrioWidth-1:0] prio_i,
+   input [PrioWidth-1:0] threshold_i,
+ 
+   output logic            irq_o,
+diff --git a/rtl/opentitan/prim_subreg_arb.sv b/rtl/opentitan/prim_subreg_arb.sv
+index 8003336..128d6e3 100644
+--- a/rtl/opentitan/prim_subreg_arb.sv
++++ b/rtl/opentitan/prim_subreg_arb.sv
+@@ -27,7 +27,7 @@ module prim_subreg_arb
+   output logic [DW-1:0] wr_data
+ );
+ 
+-  if (SwAccess inside {SwAccessRW, SwAccessWO}) begin : gen_w
++  if (SwAccess == SwAccessRW || SwAccess == SwAccessWO) begin : gen_w
+     assign wr_en   = we | de;
+     assign wr_data = (we == 1'b1) ? wd : d; // SW higher priority
+     // Unused q - Prevent lint errors.
