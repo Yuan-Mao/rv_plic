@@ -38,10 +38,19 @@ index 45f802b..3e6e60b 100644
    parameter logic [Width-1:0] ResetValue = '0
  ) (
 diff --git a/rtl/rv_plic.sv b/rtl/rv_plic.sv
-index 87c8c7f..f69908b 100644
+index 87c8c7f..c33d866 100644
 --- a/rtl/rv_plic.sv
 +++ b/rtl/rv_plic.sv
-@@ -41,7 +41,7 @@ module rv_plic import rv_plic_reg_pkg::*; #(
+@@ -14,6 +14,8 @@
+ // Verilog parameter
+ //   MAX_PRIO: Maximum value of interrupt priority
+
++`include "prim_assert.sv"
++
+ module rv_plic import rv_plic_reg_pkg::*; #(
+   parameter logic [NumAlerts-1:0] AlertAsyncOn  = {NumAlerts{1'b1}},
+   // OpenTitan IP standardizes on level triggered interrupts,
+@@ -41,7 +43,7 @@ module rv_plic import rv_plic_reg_pkg::*; #(
  
    // Interrupt notification to targets
    output [NumTarget-1:0] irq_o,
@@ -50,7 +59,7 @@ index 87c8c7f..f69908b 100644
  
    output logic [NumTarget-1:0] msip_o
  );
-@@ -54,21 +54,21 @@ module rv_plic import rv_plic_reg_pkg::*; #(
+@@ -54,21 +56,21 @@ module rv_plic import rv_plic_reg_pkg::*; #(
  
    logic [NumSrc-1:0] ip;
  

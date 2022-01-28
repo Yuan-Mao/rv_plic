@@ -31,6 +31,7 @@ all:
 	cp $(OPENTITAN_DIR)/hw/ip/tlul/rtl/tlul_data_integ_enc.sv        rtl/
 	cp $(OPENTITAN_DIR)/hw/ip/tlul/rtl/tlul_data_integ_dec.sv        rtl/
 	cp $(OPENTITAN_DIR)/hw/ip/tlul/rtl/tlul_adapter_host.sv          rtl/
+	cp $(OPENTITAN_DIR)/hw/ip/prim/rtl/prim_assert.sv                rtl/
 	cp $(OPENTITAN_DIR)/hw/ip/prim_generic/rtl/prim_generic_buf.sv rtl/prim_buf.sv
 	cp $(OPENTITAN_DIR)/hw/ip/prim_generic/rtl/prim_generic_flop_2sync.sv rtl/prim_flop_2sync.sv
 	cp $(OPENTITAN_DIR)/hw/ip/prim/rtl/prim_subreg_arb.sv rtl/
