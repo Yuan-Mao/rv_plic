@@ -113,3 +113,40 @@ index 8003336..128d6e3 100644
      assign wr_en   = we | de;
      assign wr_data = (we == 1'b1) ? wd : d; // SW higher priority
      // Unused q - Prevent lint errors.
+diff --git a/rtl/prim_assert.sv b/rtl/prim_assert.sv
+index da016e491..b2ba6aeaf 100644
+--- a/rtl/prim_assert.sv
++++ b/rtl/prim_assert.sv
+@@ -79,7 +79,8 @@
+  `include "prim_assert_yosys_macros.svh"
+  `define INC_ASSERT
+ `else
+- `include "prim_assert_standard_macros.svh"
++// `include "prim_assert_standard_macros.svh"
++ `include "prim_assert_dummy_macros.svh"
+  `define INC_ASSERT
+ `endif
+
+diff --git a/rtl/rv_plic_target.sv b/rtl/rv_plic_target.sv
+index 7d5e41a..e035b18 100644
+--- a/rtl/rv_plic_target.sv
++++ b/rtl/rv_plic_target.sv
+@@ -87,9 +87,15 @@ module rv_plic_target #(
+         // forwarding muxes
+         // Note: these ternaries have triggered a synthesis bug in Vivado versions older
+         // than 2020.2. If the problem resurfaces again, have a look at issue #1408.
+-        assign is_tree[Pa]  = (sel) ? is_tree[C1]  : is_tree[C0];
+-        assign id_tree[Pa]  = (sel) ? id_tree[C1]  : id_tree[C0];
+-        assign max_tree[Pa] = (sel) ? max_tree[C1] : max_tree[C0];
++//        assign is_tree[Pa]  = (sel) ? is_tree[C1]  : is_tree[C0];
++//        assign id_tree[Pa]  = (sel) ? id_tree[C1]  : id_tree[C0];
++//        assign max_tree[Pa] = (sel) ? max_tree[C1] : max_tree[C0];
++          assign is_tree[Pa]  = (sel               & is_tree[C1])  |
++                              ((~sel)            & is_tree[C0]);
++          assign id_tree[Pa]  = ({SrcWidth{sel}}   & id_tree[C1])  |
++                              ({SrcWidth{~sel}}  & id_tree[C0]);
++          assign max_tree[Pa] = ({PrioWidth{sel}}  & max_tree[C1]) |
++                              ({PrioWidth{~sel}} & max_tree[C0]);
+       end
+     end : gen_level
+   end : gen_tree
